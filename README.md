@@ -1,108 +1,214 @@
-# Kept: a CRM for people who are the whole company (Phases 2 and 3 in one zip)
+# Kept
 
-| Phase | What you get | Needs |
-|---|---|---|
-| 1. The core (done) | Contacts, companies, deals board, tasks, dashboard, search, CSV export | Node.js |
-| **2 and 3. Sync, reports, import, lead form, new landing page (this zip)** | **Email login, sync across devices, warmth map, reports, CSV import, public lead form, deploy guide** | A free Supabase project (Kept works fully on one device without it) |
+> **A quiet, local-first CRM for solo businesses.**  
+> Contacts, deals, tasks, and follow-ups in one place — designed around one core truth: *people go cold*.
 
-## What's new
+Kept is built for people who are the whole company: freelancers, consultants, agency founders, and independent operators. No bloated enterprise workflows, no sales-team permissions, and no recurring software subscriptions required. Just a fast, disciplined tool to know your clients, keep relationships warm, and close deals.
 
-- **A new landing page built around one idea: people go cold.**
-  - A wall of names, all red, slowly fading to gray. Click one to keep it warm.
-  - A pinned, scroll-driven "Tuesday with Kept" where the interface animates through the day.
-  - A manifesto whose words light up as you read.
-  - A feature index that floods red on hover.
-  - A price slider instead of three boxes.
-  - A short intro counter, and a square cursor that swells over clickable things.
-  Motion is reduced automatically for people who prefer it. The cursor appears only for mouse users, and the intro plays once per visit.
-- **Warmth,** the same idea inside the app: a warmth map on the dashboard (one square per person) and a warmth bar on every contact.
-- **Email login and sync.** Everything stays instant and works offline. When you are logged in, changes sync to your account, and Kept catches up whenever you return to the tab.
-- **Reports:** revenue by month for the last year, average deal, win rate, average days to win, best clients.
-- **CSV import** with a preview, duplicate skipping and automatic companies. What you export, you can import.
-- **Lead capture form:** a public link (or embed) that files each visitor as a contact tagged "lead", with their message on the timeline.
-- Numbers count up, pages ease in, report bars grow.
+Built with Swiss design principles — white paper, black ink, hairline rules, strict typography, and a single signature red (`#e30613`).
 
-## 1. Set up Supabase (about 15 minutes)
+---
 
-1. Create a free project at supabase.com.
-2. **SQL Editor > New query**, paste all of `supabase/schema.sql`, press **Run**. Check Table Editor for `records` and `lead_forms`.
-3. **Authentication > Sign In / Providers**: make sure **Email** is enabled.
-4. **Authentication > Email Templates > Magic Link**: edit the body so it contains `{{ .Token }}`, for example:
+## Highlights
 
-       <h2>Your Kept code</h2>
-       <p>Enter this code to log in: <b>{{ .Token }}</b></p>
+- **Local-First & Instant**: Zero signup required to start. Everything runs offline in your browser using `localStorage`. Instant loads, zero network latency.
+- **Warmth Tracking**: Visual relationship indicators and an interactive dashboard warmth map. Kept tracks time since your last touchpoint (call, email, meeting, note) and highlights fading relationships before clients go cold.
+- **Visual Deal Pipeline**: Minimalist Kanban board across standard lifecycle stages (`Lead` → `Contacted` → `Proposal` → `Negotiation` → `Won` / `Lost`). Automatically tracks close dates and pipeline velocity.
+- **Context-Aware Tasks**: Unified task system organized into actionable buckets (`Overdue`, `Today`, `Upcoming`, `Someday`) linked directly to contacts and deals.
+- **Analytics & Reports**: Visual revenue reporting for the trailing 12 months, win rate percentage, average deal size, average days to win, and ranking of your top clients.
+- **Public Lead Capture Form**: Shareable standalone link (`/lead?f=<token>`) or embeddable widget. Inbound leads are safely validated and filed directly into your CRM with a timestamped note via PostgreSQL RPC.
+- **Optional Multi-Device Cloud Sync**: Connect a free Supabase project for passwordless email login (magic link / OTP) and automatic bi-directional sync across all your devices.
+- **Data Sovereignty & Portability**: Full CSV import with live preview and duplicate detection, plus single-click CSV export anytime.
 
-5. **Project Settings > API**: copy the Project URL and the **anon public** key. Never use the service_role key in this app.
+---
 
-## 2. Run it
+## The Core Concept: Warmth
 
-    copy .env.example .env      (open .env and paste the two values)
-    npm install
-    npm test
-    npm run dev
+Most CRMs are databases of dead contacts. Kept is built around **warmth**:
 
-Restart `npm run dev` after changing `.env`. `npm test` runs two suites: the business rules (including reports, import, warmth and tracked deletes) and the sync merge rules.
+1. Every touchpoint you log (a call, note, email, or meeting) resets a contact's warmth to 100%.
+2. Over time, each contact's warmth indicator slowly decays toward gray based on your configurable follow-up threshold (e.g. 30 days).
+3. The dashboard displays an interactive warmth grid where every client is represented by a tile. When squares turn gray, Kept reminds you who needs a conversation before the relationship slips away.
 
-## 3. Try these
+---
 
-1. Open the landing page. Wait for the names to fade, click a few to warm them, then scroll through the Tuesday story and watch the manifesto light up. Drag the price slider.
-2. Open Kept > Dashboard > **Load sample data**. Find the warmth map: some squares are gray.
-3. Open **Reports**: bars grow, best clients are listed.
-4. Settings > Import: choose a CSV (try the file you export first, after adding a row). Read the preview before importing.
-5. **Sync test with two windows:** log in (Settings > Log in, or /login) in both a normal and a private window with the same email. Add a contact in one. Switch to the other window: it appears. Delete it there, switch back: it is gone.
-6. Edit the same contact in both windows. The most recent edit wins in both.
-7. **Lead form:** Settings > Lead capture form > copy the link, open it in a private window, send a message. Back in Kept it appears in Contacts a moment later, tagged "lead", with the message on its timeline.
-8. Turn the form off and reload the link: it says it is not available.
+## Tech Stack
 
-## Architecture
+| Layer | Technology |
+|---|---|
+| **Framework** | [React 18](https://react.dev/) + [Vite 5](https://vitejs.dev/) |
+| **Routing** | [React Router v6](https://reactrouter.com/) |
+| **Styling** | [Tailwind CSS v4](https://tailwindcss.com/) + CSS Variables (`var(--paper)`, `var(--ink)`, `var(--red)`) |
+| **Animations** | [Framer Motion](https://www.framer.com/motion/) (with automatic `prefers-reduced-motion` support) |
+| **Icons** | [Lucide React](https://lucide.dev/) |
+| **Typography** | [Inter Tight](https://fonts.google.com/specimen/Inter+Tight) |
+| **Backend / Sync** *(Optional)* | [Supabase](https://supabase.com/) (PostgreSQL, Row Level Security, RPC Functions, Magic Link Auth) |
+| **Testing** | Native Node.js test runner (`node:assert`) |
 
-    kept/
-    ├── index.html, vite.config.js, vercel.json, package.json, .env.example
-    ├── supabase/schema.sql      records, lead_forms, the capture_lead function, security rules
-    └── src/
-        ├── main.jsx             routes and providers
-        ├── index.css            tokens: white, black, one red, "cold" gray
-        ├── lib/
-        │   ├── crm.js (+test)   rules: pipeline, warmth, reports, CSV import, tracked deletes
-        │   ├── sync.js (+test)  merging this device with the cloud
-        │   ├── store.jsx        app state: saves locally, syncs when logged in
-        │   ├── cloud.js, supabase.js, auth.jsx, sample.js, pricing.js
-        ├── components/          Logo, AppShell, Modal, Forms, Cursor, CountUp, Warmth
-        └── pages/               Landing, Login, Lead, Dashboard, Contacts, ContactDetail, Companies, Deals, Tasks, Reports, Settings, NotFound
+---
 
-### How sync works
+## Quickstart
 
-- Every record has an `updatedAt`. When this device and the cloud both have a record, **the newer one wins**.
-- A delete is saved as a small "tombstone", so something deleted on one device cannot come back from another. Deleting a contact also tombstones its notes and tasks.
-- Logging in for the first time merges: what is only here is uploaded, what is only in the cloud is downloaded.
-- Changes upload about a second after you make them. Coming back to the tab pulls the latest.
-- The merge rules are plain functions with tests, including the "delete on one device, sync to another" story.
+### 1. Run Locally (Zero Config)
 
-### How the lead form stays safe
+Kept works fully on your machine without any external accounts or API keys:
 
-Visitors are not logged in, so they cannot write to your tables. The form calls a database function that checks a secret token, validates the length of every field, and files the contact and note in your account. It can do nothing else.
+```bash
+# Clone the repository
+git clone https://github.com/your-username/kept.git
+cd kept
 
-## Deploy (free)
+# Install dependencies
+npm install
 
-1. Put the project on GitHub: `git init`, `git add .`, `git commit -m "Kept"`, then create an empty repository on github.com and run the two lines it shows. The `.gitignore` keeps `.env` out.
-2. vercel.com > **Add New > Project** > import it. Leave the framework as Vite.
-3. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` as environment variables. Deploy.
-4. Supabase > **Authentication > URL Configuration**: set the Site URL to your Vercel address.
-5. On the live site, copy your lead form link again: it now uses the live address.
+# Run test suites
+npm test
 
-## Limits and honest notes
+# Start local development server
+npm run dev
+```
 
-- **Sync is newest-edit-wins, per record, using each device's clock.** If two devices edit the same contact at nearly the same time, one edit is lost. A device with a very wrong clock can win unfairly.
-- **The lead form has no spam protection beyond a hidden trap field and length limits.** If it is abused, turn it off in Settings.
-- **New leads appear after the next sync,** which happens when you open or return to Kept.
-- **Pricing on the landing page is illustrative.** The plan features are not enforced.
-- **Supabase's built-in email sender** allows only a few login codes per hour. Add your own provider (Authentication > SMTP) before real traffic.
-- **Tombstones are kept forever.** For a solo business this is a tiny amount of data.
+Open `http://localhost:5173` in your browser. You can click **"Load sample data"** in the dashboard to immediately explore the interface.
 
-## If something goes wrong
+---
 
-- **"Accounts are not set up yet":** `.env` is missing, misnamed, or the dev server was not restarted.
-- **Email has a link but no code:** you did not edit the Magic Link template (step 4).
-- **Settings says "Sync problem: ...":** copy the message. Most often the schema was not run completely.
-- **The lead form says "not available":** the form is off, the link is wrong, or Supabase keys are missing.
-- **A file is 0 bytes after copying:** run `Get-ChildItem -Recurse src -File | Select-Object FullName, Length`.
+### 2. Optional: Enable Cloud Sync & Lead Capture (Supabase)
+
+To enable email login, multi-device sync, and public lead capture, connect a free Supabase project:
+
+1. **Create a project**: Sign up for free at [supabase.com](https://supabase.com) and create a new project.
+2. **Apply the schema**:
+   - In your Supabase dashboard, navigate to **SQL Editor > New query**.
+   - Paste the contents of [`supabase/schema.sql`](supabase/schema.sql) and click **Run**.
+   - Verify in the **Table Editor** that `records` and `lead_forms` tables are created.
+3. **Configure Authentication**:
+   - Go to **Authentication > Providers > Email** and ensure Email sign-in is enabled.
+   - Go to **Authentication > Email Templates > Magic Link**, and ensure the template includes `{{ .Token }}`:
+     ```html
+     <h2>Your Kept Login Code</h2>
+     <p>Enter this verification code to log in: <b>{{ .Token }}</b></p>
+     ```
+4. **Set Environment Variables**:
+   - In Supabase, go to **Project Settings > API**.
+   - Copy the **Project URL** and the **anon public** key (never use the `service_role` key in frontend code).
+   - In your Kept folder, create `.env` from `.env.example`:
+     ```env
+     VITE_SUPABASE_URL=https://your-project-id.supabase.co
+     VITE_SUPABASE_ANON_KEY=your-anon-public-key
+     ```
+   - Restart the dev server (`npm run dev`).
+
+---
+
+## Project Structure
+
+```text
+kept/
+├── index.html               # App entrypoint, theme bootstrap, Inter Tight font
+├── vite.config.js           # Vite configuration with React and Tailwind CSS v4 plugins
+├── vercel.json              # SPA routing rewrites for Vercel deployment
+├── supabase/
+│   └── schema.sql           # Database schema, RLS policies, and lead capture RPC function
+└── src/
+    ├── main.jsx             # React entrypoint, routing, and provider configuration
+    ├── index.css            # Swiss design tokens, color palette, custom utilities
+    ├── components/
+    │   ├── AppShell.jsx     # Navigation sidebar, global search shortcut (⌘K / Ctrl+K)
+    │   ├── Warmth.jsx       # Warmth bar, warmth tile grid, and status indicators
+    │   ├── Forms.jsx        # Standardized inputs, entity creation, and edit sheets
+    │   ├── Modal.jsx        # Accessible dialog wrapper
+    │   ├── CountUp.jsx      # Animated tabular numeral transitions
+    │   ├── Cursor.jsx       # Interactive precision pointer
+    │   └── Logo.jsx         # Minimal geometric wordmark
+    ├── lib/
+    │   ├── crm.js           # Pure business logic: pipeline, warmth decay, reports, CSV engine
+    │   ├── crm.test.js      # Unit tests for CRM calculations and transformations
+    │   ├── sync.js          # Sync engine: merge algorithm, record flattening, conflict resolution
+    │   ├── sync.test.js     # Unit tests for bidirectional sync and tombstone propagation
+    │   ├── store.jsx        # Unified app state provider: local-first persistence + sync coordinator
+    │   ├── cloud.js         # Supabase client queries with error boundaries
+    │   ├── supabase.js      # Supabase client instantiation
+    │   ├── auth.jsx         # Session state, OTP submission, and sign-out logic
+    │   ├── sample.js        # Realistic seed dataset for instant onboarding
+    │   └── pricing.js       # Plan definitions
+    └── pages/
+        ├── Landing.jsx      # Interactive landing page with warmth simulator & live demo
+        ├── Dashboard.jsx    # Overview metrics, upcoming tasks, stale contact alerts, warmth map
+        ├── Contacts.jsx     # Contact directory, search, filtering, and tag management
+        ├── ContactDetail.jsx# Full client profile: contact metadata, deals, notes, and activity timeline
+        ├── Companies.jsx    # Organization directory linked to associated contacts and deals
+        ├── Deals.jsx        # Kanban stage pipeline with deal values and stage progression
+        ├── Tasks.jsx        # Categorized task manager with due-date classification
+        ├── Reports.jsx      # Trailing 12-month revenue chart, win rates, and top customer tables
+        ├── Lead.jsx         # Public standalone lead capture form (`/lead?f=<token>`)
+        ├── Login.jsx        # Passwordless email verification login view
+        ├── Settings.jsx     # Data import/export, lead form configuration, currency, dark mode
+        └── NotFound.jsx     # 404 fallback page
+```
+
+---
+
+## How Sync Works
+
+Kept follows an **offline-first, newest-wins (LWW)** architecture:
+
+1. **Local-First**: Every mutation writes synchronously to `localStorage`. The app never waits for the network to render state updates.
+2. **Deterministic Merge**: Every record contains an `updatedAt` millisecond timestamp. When local and remote states are synchronized, the record with the newer timestamp takes precedence.
+3. **Deletion Tombstones**: Deleting an entity creates a lightweight tombstone record (`deleted: true`). This prevents a deleted contact on one device from being resurrected by an offline device during sync. Deleting a contact automatically cascades tombstones to its linked tasks and activities.
+4. **Background Reconciliation**:
+   - Sync triggers automatically upon logging in.
+   - Local changes are debounced (~900ms) before being pushed to Supabase.
+   - Returning to the application tab (`visibilitychange`) automatically pulls incoming updates.
+
+### Lead Capture Security
+
+Public visitors submitting the lead capture form cannot read or directly insert into your database tables. Instead, submissions invoke a PostgreSQL stored procedure (`capture_lead`) marked `SECURITY DEFINER`:
+
+- Validates that the form token exists and is active.
+- Enforces strict character-length limits on names, emails, and message contents.
+- Automatically encapsulates the submission into a contact tagged `lead` along with an activity note on the contact's timeline.
+
+---
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Starts the Vite local development server on port 5173 |
+| `npm run build` | Builds optimized production static assets into `dist/` |
+| `npm run preview` | Previews the production build locally |
+| `npm test` | Executes both `crm.test.js` and `sync.test.js` unit test suites |
+
+---
+
+## Deployment
+
+Because Kept is a static Single Page Application (SPA), it can be deployed to any modern web host in seconds.
+
+### Deploying to Vercel
+
+1. Push your repository to GitHub.
+2. In [Vercel](https://vercel.com), select **Add New > Project** and import your repository.
+3. Framework preset will automatically detect **Vite**.
+4. In **Environment Variables**, add:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+5. Click **Deploy**.
+6. In Supabase, update **Authentication > URL Configuration > Site URL** to your production Vercel domain.
+
+*Note: [`vercel.json`](vercel.json) is pre-configured with client-side SPA route rewrites.*
+
+---
+
+## Design System & Accessibility
+
+- **Swiss Minimalist Palette**: Strict contrast ratios using `--paper`, `--ink`, `--muted`, and `--red`.
+- **Light & Dark Themes**: First-class dark mode support toggled in Settings or automatically inherited via system preference.
+- **Accessibility & Motion**: Complies with `prefers-reduced-motion` to disable non-essential animations. Custom cursor effects only activate for pointer devices with hover capability.
+- **Fast Keyboard Navigation**: Global search shortcut (`⌘K` / `Ctrl+K`) to jump directly to any contact, company, or deal.
+
+---
+
+## License
+
+MIT License. Free to use, modify, and self-host for your business.
