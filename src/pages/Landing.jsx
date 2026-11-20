@@ -33,10 +33,10 @@ function Names({ go }) {
       <p className="h text-[clamp(1.9rem,4.6vw,4.2rem)]" style={{ lineHeight: 1.08, letterSpacing: '-.035em' }}>
         {NAMES.map((n, i) => <span key={n}><button className="name" onClick={() => setWarm((w) => w.map((v, j) => (j === i ? 1 : v)))} style={{ color: color(warm[i]) }} aria-label={`${n}, ${warm[i] > 0.35 ? 'warm' : 'gone cold'}. Press to keep warm.`}>{n}</button><span style={{ color: 'var(--cold)' }}> / </span></span>)}
       </p>
-      <div className="flex flex-wrap items-center gap-x-8 gap-y-2 mt-8 border-t-4 rule pt-4">
-        <b className="h text-5xl tabular-nums" role="status">{alive}<span className="text-2xl" style={{ color: 'var(--muted)' }}> of {NAMES.length} still warm</span></b>
-        <p className="font-semibold">{alive === 0 ? 'That is how it feels to lose a client.' : 'Click a name to keep it warm.'}</p>
-        <button onClick={() => setWarm(NAMES.map(() => 1))} className="font-semibold underline underline-offset-4 ml-auto">Warm everyone up</button>
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-8 border-t-4 rule pt-4">
+        <b className="h text-3xl sm:text-5xl tabular-nums" role="status">{alive}<span className="text-xl sm:text-2xl" style={{ color: 'var(--muted)' }}> of {NAMES.length} still warm</span></b>
+        <p className="font-semibold text-sm sm:text-base">{alive === 0 ? 'That is how it feels to lose a client.' : 'Click a name to keep it warm.'}</p>
+        <button onClick={() => setWarm(NAMES.map(() => 1))} className="font-semibold underline underline-offset-4 ml-auto text-sm sm:text-base">Warm everyone up</button>
       </div>
     </div>
   )
@@ -48,12 +48,12 @@ const SCENES = [
   { t: '14:15', h: 'You win one. Drag it.', d: 'Move the deal to Won. The close date and your monthly total sort themselves out.' },
   { t: '17:45', h: 'Then Kept taps your shoulder.', d: 'Hana has not heard from you in 31 days. One click to say hello.' },
 ]
-const Card = ({ children }) => <div className="border border-[var(--ink)] bg-[var(--paper)] p-5" style={{ boxShadow: '12px 12px 0 var(--red)' }}>{children}</div>
+const Card = ({ children }) => <div className="border border-[var(--ink)] bg-[var(--paper)] p-4 sm:p-5 mr-3 mb-3" style={{ boxShadow: '8px 8px 0 var(--red)' }}>{children}</div>
 const UI = [
-  () => <Card><p className="label">Tasks</p><div className="flex items-center gap-3 mt-3"><span className="size-6 border border-[var(--ink)] grid place-items-center text-white" style={{ background: 'var(--ink)' }}><motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.9, type: 'spring' }}>✓</motion.span></span><b className="text-xl flex-1">Send brand identity proposal</b><span className="font-bold text-sm" style={{ color: 'var(--red)' }}>Overdue</span></div></Card>,
-  () => <Card><p className="label">Marta Tesfaye, timeline</p><p className="mt-3"><b>Call</b> <span className="label">today</span></p><motion.p className="text-lg" initial={{ clipPath: 'inset(0 100% 0 0)' }} animate={{ clipPath: 'inset(0 0% 0 0)' }} transition={{ delay: 0.3, duration: 1.4, ease: 'linear' }}>Talked through scope. She wants three logo directions.</motion.p></Card>,
-  () => <Card><div className="grid grid-cols-3 gap-3 text-sm font-bold"><span>Proposal</span><span>Negotiation</span><span>Won</span></div><div className="grid grid-cols-3 gap-3 mt-3 h-24"><span /><motion.p className="border border-[var(--ink)] p-2 font-bold text-sm h-fit" initial={{ x: 0, background: 'var(--paper)', color: 'var(--ink)' }} animate={{ x: 'calc(100% + 12px)', background: 'var(--ink)', color: 'var(--paper)' }} transition={{ delay: 0.5, duration: 0.9, ease: EASE }}>Annual print contract</motion.p><span /></div></Card>,
-  () => <Card><div className="flex items-center justify-between"><b className="text-xl">Hana Bekele</b><span className="font-bold text-sm">31 days</span></div><div className="h-2 mt-3" style={{ background: 'var(--soft)' }}><motion.div className="h-full" initial={{ width: '100%', background: 'var(--red)' }} animate={{ width: '12%', background: 'var(--cold)' }} transition={{ duration: 1.6 }} /></div><button className="btn mt-5" tabIndex={-1}>Say hello</button></Card>,
+  () => <Card><p className="label text-xs sm:text-sm">Tasks</p><div className="flex items-center gap-2 sm:gap-3 mt-3"><span className="size-5 sm:size-6 border border-[var(--ink)] grid place-items-center text-white shrink-0" style={{ background: 'var(--ink)' }}><motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.9, type: 'spring' }}>✓</motion.span></span><b className="text-base sm:text-xl flex-1 min-w-0 truncate">Send brand identity proposal</b><span className="font-bold text-xs sm:text-sm shrink-0" style={{ color: 'var(--red)' }}>Overdue</span></div></Card>,
+  () => <Card><p className="label text-xs sm:text-sm">Marta Tesfaye, timeline</p><p className="mt-2 sm:mt-3 text-sm sm:text-base"><b>Call</b> <span className="label">today</span></p><motion.p className="text-base sm:text-lg mt-1" initial={{ clipPath: 'inset(0 100% 0 0)' }} animate={{ clipPath: 'inset(0 0% 0 0)' }} transition={{ delay: 0.3, duration: 1.4, ease: 'linear' }}>Talked through scope. She wants three logo directions.</motion.p></Card>,
+  () => <Card><div className="grid grid-cols-3 gap-2 sm:gap-3 text-xs sm:text-sm font-bold"><span>Proposal</span><span>Negotiation</span><span>Won</span></div><div className="grid grid-cols-3 gap-2 sm:gap-3 mt-3 h-20 sm:h-24"><span /><motion.p className="border border-[var(--ink)] p-2 font-bold text-xs sm:text-sm h-fit" initial={{ x: 0, background: 'var(--paper)', color: 'var(--ink)' }} animate={{ x: 'calc(100% + 8px)', background: 'var(--ink)', color: 'var(--paper)' }} transition={{ delay: 0.5, duration: 0.9, ease: EASE }}>Annual print contract</motion.p><span /></div></Card>,
+  () => <Card><div className="flex items-center justify-between"><b className="text-lg sm:text-xl">Hana Bekele</b><span className="font-bold text-xs sm:text-sm">31 days</span></div><div className="h-2 mt-3" style={{ background: 'var(--soft)' }}><motion.div className="h-full" initial={{ width: '100%', background: 'var(--red)' }} animate={{ width: '12%', background: 'var(--cold)' }} transition={{ duration: 1.6 }} /></div><button className="btn mt-4 sm:mt-5 text-sm sm:text-base !py-1.5 sm:!py-2" tabIndex={-1}>Say hello</button></Card>,
 ]
 function Story() {
   const ref = useRef(null)
@@ -64,16 +64,16 @@ function Story() {
   return (
     <section ref={ref} className="relative border-t-4 rule" style={{ height: `${SCENES.length * 85}vh` }} aria-label="A Tuesday with Kept">
       <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="max-w-7xl mx-auto h-full px-5 grid md:grid-cols-2 gap-10 items-center py-10">
+        <div className="max-w-7xl mx-auto h-full px-5 grid md:grid-cols-2 gap-6 md:gap-10 items-center py-6 sm:py-10">
           <div>
-            <p className="font-semibold flex items-center gap-2"><span className="sq" />A Tuesday with Kept</p>
-            <AnimatePresence mode="wait"><motion.div key={i} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} transition={{ duration: 0.4, ease: EASE }}>
-              <b className="h block text-[clamp(5.5rem,17vw,14rem)] tabular-nums" style={{ color: 'var(--red)' }}>{S.t}</b>
-              <h2 className="h text-3xl sm:text-5xl mt-2">{S.h}</h2><p className="mt-4 text-lg sm:text-xl max-w-md" style={{ color: 'var(--muted)' }}>{S.d}</p>
+            <p className="font-semibold flex items-center gap-2 text-sm sm:text-base"><span className="sq" />A Tuesday with Kept</p>
+            <AnimatePresence mode="wait"><motion.div key={i} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.35, ease: EASE }}>
+              <b className="h block text-[clamp(4rem,14vw,14rem)] tabular-nums" style={{ color: 'var(--red)' }}>{S.t}</b>
+              <h2 className="h text-2xl sm:text-5xl mt-2">{S.h}</h2><p className="mt-2 sm:mt-4 text-base sm:text-xl max-w-md" style={{ color: 'var(--muted)' }}>{S.d}</p>
             </motion.div></AnimatePresence>
-            <div className="flex gap-2 mt-8" aria-hidden="true">{SCENES.map((_, k) => <span key={k} className="h-1.5 w-12 transition-colors" style={{ background: k <= i ? 'var(--red)' : 'var(--hair)' }} />)}</div>
+            <div className="flex gap-2 mt-4 sm:mt-8" aria-hidden="true">{SCENES.map((_, k) => <span key={k} className="h-1.5 w-8 sm:w-12 transition-colors" style={{ background: k <= i ? 'var(--red)' : 'var(--hair)' }} />)}</div>
           </div>
-          <div className="relative min-h-60"><AnimatePresence mode="wait"><motion.div key={i} initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }} transition={{ duration: 0.45, ease: EASE }}><View /></motion.div></AnimatePresence></div>
+          <div className="relative min-h-48 sm:min-h-60 mt-2 md:mt-0"><AnimatePresence mode="wait"><motion.div key={i} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.4, ease: EASE }}><View /></motion.div></AnimatePresence></div>
         </div>
       </div>
     </section>
@@ -99,13 +99,13 @@ function Price() {
     <div className="grid md:grid-cols-12 gap-8 mt-12 border-t-4 rule pt-6">
       <div className="md:col-span-5">
         <label className="text-2xl font-bold" style={{ letterSpacing: '-.02em' }} htmlFor="people">How many people do you keep track of?</label>
-        <p className="h text-[clamp(5rem,12vw,9rem)] mt-4 tabular-nums">{n.toLocaleString()}</p>
+        <p className="h text-[clamp(3.5rem,11vw,9rem)] mt-2 sm:mt-4 tabular-nums">{n.toLocaleString()}</p>
         <input id="people" type="range" min="5" max="2000" step="5" value={n} onChange={(e) => setN(+e.target.value)} className="w-full accent-[var(--red)] mt-4" />
       </div>
       <div className="md:col-span-7 md:pl-10 md:border-l hairline">
         <AnimatePresence mode="wait"><motion.div key={plan.name} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.3 }}>
           <p className="font-bold text-xl">{plan.name}, <span style={{ color: 'var(--muted)' }}>{plan.note}</span></p>
-          <p className="mt-2"><b className="h text-[clamp(7rem,20vw,15rem)]">${plan.price}</b><span className="label"> a month</span></p>
+          <p className="mt-2"><b className="h text-[clamp(4.5rem,16vw,15rem)]">${plan.price}</b><span className="label"> a month</span></p>
           <ul className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-2 font-medium">{plan.features.map((f) => <li key={f} className="flex gap-2"><span className="sq mt-2" />{f}</li>)}</ul>
           <Link to="/app" className="btn mt-8 text-lg !px-7 !py-3.5">{plan.price === '0' ? 'Start free' : 'Try ' + plan.name}</Link>
         </motion.div></AnimatePresence>
@@ -124,10 +124,10 @@ export default function Landing() {
       <header className="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between"><Logo /><nav className="flex items-center gap-6 font-semibold"><a href="#story" className="hidden sm:block hover:underline underline-offset-4">The day</a><a href="#inside" className="hidden sm:block hover:underline underline-offset-4">Inside</a><a href="#price" className="hidden sm:block hover:underline underline-offset-4">Price</a><Link to="/app" className="btn !py-2">Open Kept</Link></nav></header>
 
       <section className="max-w-7xl mx-auto px-5 pt-12 pb-24">
-        <p className="font-semibold flex items-center gap-2"><span className="sq" />Kept, a CRM for people who are the whole company</p>
-        <h1 className="h text-[clamp(3.7rem,14vw,13rem)] mt-6"><Line i={0} go={!intro}>Don’t let</Line><Line i={1} go={!intro}>them go cold<span style={{ color: 'var(--red)' }}>.</span></Line></h1>
-        <motion.p initial={{ opacity: 0, y: 20 }} animate={!intro ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.5, duration: 0.8 }} className="mt-10 max-w-xl text-xl sm:text-2xl font-medium" style={{ letterSpacing: '-.02em' }}>Every client you promised to circle back to. Kept remembers who they are, what you said, and when you last spoke.</motion.p>
-        <div className="mt-16"><Names go={!intro} /></div>
+        <p className="font-semibold flex items-center gap-2 text-sm sm:text-base"><span className="sq" />Kept, a CRM for people who are the whole company</p>
+        <h1 className="h text-[clamp(2.9rem,13vw,13rem)] mt-6"><Line i={0} go={!intro}>Don’t let</Line><Line i={1} go={!intro}>them go cold<span style={{ color: 'var(--red)' }}>.</span></Line></h1>
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={!intro ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.5, duration: 0.8 }} className="mt-8 sm:mt-10 max-w-xl text-lg sm:text-2xl font-medium" style={{ letterSpacing: '-.02em' }}>Every client you promised to circle back to. Kept remembers who they are, what you said, and when you last spoke.</motion.p>
+        <div className="mt-12 sm:mt-16"><Names go={!intro} /></div>
       </section>
 
       <div id="story" className="scroll-mt-0"><Story /></div>
@@ -153,11 +153,11 @@ export default function Landing() {
         <div className="md:col-span-7 border-t-4 rule">{QA.map(([q, a]) => <details key={q} className="border-b hairline py-5 group"><summary className="h text-2xl sm:text-3xl cursor-pointer list-none flex justify-between gap-4" style={{ letterSpacing: '-.03em', lineHeight: 1.05 }}>{q}<span className="transition-transform group-open:rotate-45" style={{ color: 'var(--red)' }}>+</span></summary><p className="mt-3 text-xl max-w-xl" style={{ color: 'var(--muted)' }}>{a}</p></details>)}</div>
       </section>
 
-      <section style={{ background: 'var(--red)', color: '#fff' }}><div className="max-w-7xl mx-auto px-5 py-24 sm:py-32">
-        <h2 className="h text-[clamp(4rem,19vw,17rem)]">Keep them.</h2>
-        <Link to="/app" className="btn !bg-[var(--ink)] !border-[var(--ink)] !text-[var(--paper)] text-xl !px-9 !py-4 mt-10">Open Kept, it is free</Link>
+      <section style={{ background: 'var(--red)', color: '#fff' }}><div className="max-w-7xl mx-auto px-5 py-20 sm:py-32">
+        <h2 className="h text-[clamp(3.2rem,17vw,17rem)]">Keep them.</h2>
+        <Link to="/app" className="btn !bg-[var(--ink)] !border-[var(--ink)] !text-[var(--paper)] text-lg sm:text-xl !px-7 sm:!px-9 !py-3 sm:!py-4 mt-8 sm:mt-10">Open Kept, it is free</Link>
       </div></section>
-      <footer className="max-w-7xl mx-auto px-5 py-8 flex flex-wrap justify-between gap-4 items-center"><Logo size={22} /><span className="label">Made for people who are the whole company.</span></footer>
+      <footer className="max-w-7xl mx-auto px-5 py-8 flex flex-col sm:flex-row justify-between gap-4 items-center text-center sm:text-left"><Logo size={22} /><span className="label">Made for people who are the whole company.</span></footer>
     </div>
   )
 }

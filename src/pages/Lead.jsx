@@ -19,23 +19,23 @@ export default function Lead() {
     try { await submitLead({ token, name: f.name, email: f.email, message: f.message }); setState('done') } catch (x) { setErr(x.message); setState('idle') }
   }
   return (
-    <div className="min-h-screen max-w-3xl mx-auto px-5 py-10">
+    <div className="min-h-screen max-w-3xl mx-auto px-4 sm:px-5 py-8 sm:py-10">
       {state === 'done' ? (
-        <div className="mt-16"><h1 className="h text-[clamp(4rem,16vw,10rem)]">Thank you<span style={{ color: 'var(--red)' }}>.</span></h1><p className="text-2xl mt-6 font-medium">Your message is in. You will hear back soon.</p></div>
-      ) : !configured ? <p className="text-xl mt-16">This form is not available right now.</p> : (
+        <div className="mt-12 sm:mt-16"><h1 className="h text-[clamp(3rem,14vw,10rem)]">Thank you<span style={{ color: 'var(--red)' }}>.</span></h1><p className="text-xl sm:text-2xl mt-4 sm:mt-6 font-medium">Your message is in. You will hear back soon.</p></div>
+      ) : !configured ? <p className="text-lg sm:text-xl mt-12 sm:mt-16">This form is not available right now.</p> : (
         <>
-          <h1 className="h text-[clamp(4rem,16vw,10rem)] mt-8">Say hello<span style={{ color: 'var(--red)' }}>.</span></h1>
-          <form onSubmit={submit} className="mt-10 space-y-5 border-t-4 rule pt-6">
-            <label className="block font-semibold">Your name<input className="in mt-1 !text-xl" value={f.name} onChange={set('name')} autoComplete="name" /></label>
-            <label className="block font-semibold">Email<input type="email" className="in mt-1 !text-xl" value={f.email} onChange={set('email')} autoComplete="email" /></label>
-            <label className="block font-semibold">How can we help?<textarea className="in mt-1 !text-xl" rows={5} maxLength={1000} value={f.message} onChange={set('message')} /></label>
+          <h1 className="h text-[clamp(3rem,14vw,10rem)] mt-6 sm:mt-8">Say hello<span style={{ color: 'var(--red)' }}>.</span></h1>
+          <form onSubmit={submit} className="mt-8 sm:mt-10 space-y-4 sm:space-y-5 border-t-4 rule pt-6">
+            <label className="block font-semibold text-sm sm:text-base">Your name<input className="in mt-1 text-base sm:!text-xl" value={f.name} onChange={set('name')} autoComplete="name" /></label>
+            <label className="block font-semibold text-sm sm:text-base">Email<input type="email" className="in mt-1 text-base sm:!text-xl" value={f.email} onChange={set('email')} autoComplete="email" /></label>
+            <label className="block font-semibold text-sm sm:text-base">How can we help?<textarea className="in mt-1 text-base sm:!text-xl" rows={5} maxLength={1000} value={f.message} onChange={set('message')} /></label>
             <input tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" value={f.website} onChange={set('website')} />
-            {err && <p role="alert" className="font-semibold" style={{ color: 'var(--red)' }}>{err}</p>}
-            <button disabled={state === 'sending'} className="btn text-lg !px-8 !py-3.5">{state === 'sending' ? 'Sending' : 'Send'}</button>
+            {err && <p role="alert" className="font-semibold text-sm sm:text-base" style={{ color: 'var(--red)' }}>{err}</p>}
+            <button disabled={state === 'sending'} className="btn text-base sm:text-lg !px-6 sm:!px-8 !py-3 sm:!py-3.5 w-full sm:w-auto text-center justify-center">{state === 'sending' ? 'Sending' : 'Send'}</button>
           </form>
         </>
       )}
-      <p className="label mt-16 flex items-center gap-2"><Mark size={16} />Made with <Link to="/" className="underline underline-offset-4">Kept</Link></p>
+      <p className="label mt-12 sm:mt-16 flex items-center gap-2"><Mark size={16} />Made with <Link to="/" className="underline underline-offset-4">Kept</Link></p>
     </div>
   )
 }

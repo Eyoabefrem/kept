@@ -14,23 +14,25 @@ export default function Tasks() {
   const submit = (e) => { e.preventDefault(); if (!title.trim()) return; add('task', { title: title.trim(), due, done: false, contactId: contactId || null, dealId: null }); setTitle(''); setDue(''); setContactId('') }
   return (
     <div>
-      <h1 className="h text-6xl sm:text-7xl">Tasks</h1>
-      <form onSubmit={submit} className="flex flex-wrap gap-2 mt-8 border-t-4 rule pt-4">
-        <input className="in flex-1 min-w-48" placeholder="Add a task" value={title} onChange={(e) => setTitle(e.target.value)} aria-label="Task title" />
-        <input type="date" className="in !w-auto" value={due} onChange={(e) => setDue(e.target.value)} aria-label="Due date" />
-        <select className="in !w-auto" value={contactId} onChange={(e) => setContactId(e.target.value)} aria-label="Contact"><option value="">No contact</option>{contacts.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select>
-        <button className="btn">Add</button>
+      <h1 className="h text-4xl sm:text-6xl md:text-7xl">Tasks</h1>
+      <form onSubmit={submit} className="flex flex-col sm:flex-row flex-wrap gap-2 mt-6 sm:mt-8 border-t-4 rule pt-4">
+        <input className="in flex-1 sm:min-w-48" placeholder="Add a task" value={title} onChange={(e) => setTitle(e.target.value)} aria-label="Task title" />
+        <div className="grid grid-cols-2 sm:flex gap-2">
+          <input type="date" className="in !w-full sm:!w-auto" value={due} onChange={(e) => setDue(e.target.value)} aria-label="Due date" />
+          <select className="in !w-full sm:!w-auto" value={contactId} onChange={(e) => setContactId(e.target.value)} aria-label="Contact"><option value="">No contact</option>{contacts.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select>
+        </div>
+        <button className="btn w-full sm:w-auto">Add</button>
       </form>
-      <div className="flex flex-wrap gap-2 mt-6">{TABS.map(([k, l]) => <button key={k} onClick={() => setTab(k)} aria-pressed={tab === k} className="px-4 py-1.5 font-semibold border border-[var(--ink)]" style={tab === k ? { background: 'var(--ink)', color: 'var(--paper)' } : {}}>{l} ({counts[k]})</button>)}</div>
-      {!list.length ? <p className="mt-8 text-xl" style={{ color: 'var(--muted)' }}>{tab === 'now' ? 'Nothing due. Enjoy it.' : 'Nothing here.'}</p> : (
+      <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-5 sm:mt-6">{TABS.map(([k, l]) => <button key={k} onClick={() => setTab(k)} aria-pressed={tab === k} className="px-3 sm:px-4 py-1.5 text-sm sm:text-base font-semibold border border-[var(--ink)]" style={tab === k ? { background: 'var(--ink)', color: 'var(--paper)' } : {}}>{l} ({counts[k]})</button>)}</div>
+      {!list.length ? <p className="mt-8 text-lg sm:text-xl" style={{ color: 'var(--muted)' }}>{tab === 'now' ? 'Nothing due. Enjoy it.' : 'Nothing here.'}</p> : (
         <ul className="mt-2">{list.map((t) => {
           const b = dueBucket(t), c = contacts.find((x) => x.id === t.contactId)
           return (
             <li key={t.id} className="flex items-center gap-3 py-3.5 border-b hairline">
               <button onClick={() => update('task', t.id, { done: !t.done })} aria-label={`${t.done ? 'Reopen' : 'Mark done'}: ${t.title}`} aria-pressed={t.done} className="size-5 border border-[var(--ink)] shrink-0 grid place-items-center text-xs font-black" style={t.done ? { background: 'var(--ink)', color: 'var(--paper)' } : {}}>{t.done ? '✓' : ''}</button>
-              <span className="flex-1" style={t.done ? { textDecoration: 'line-through', color: 'var(--muted)' } : {}}>{t.title}{c && <> <Link to={`/app/contacts/${c.id}`} className="label underline underline-offset-4">{c.name}</Link></>}</span>
-              {t.due && <span className="text-sm font-bold" style={{ color: b === 'overdue' ? 'var(--red)' : 'var(--muted)' }}>{b === 'overdue' ? 'Overdue ' : ''}{t.due}</span>}
-              <button onClick={() => remove('task', t.id)} aria-label={`Delete ${t.title}`}><Trash2 size={16} /></button>
+              <span className="flex-1 min-w-0 break-words text-sm sm:text-base" style={t.done ? { textDecoration: 'line-through', color: 'var(--muted)' } : {}}>{t.title}{c && <> <Link to={`/app/contacts/${c.id}`} className="label underline underline-offset-4">{c.name}</Link></>}</span>
+              {t.due && <span className="text-xs sm:text-sm font-bold shrink-0" style={{ color: b === 'overdue' ? 'var(--red)' : 'var(--muted)' }}>{b === 'overdue' ? 'Overdue ' : ''}{t.due}</span>}
+              <button onClick={() => remove('task', t.id)} aria-label={`Delete ${t.title}`} className="shrink-0 p-1"><Trash2 size={16} /></button>
             </li>)
         })}</ul>)}
     </div>
